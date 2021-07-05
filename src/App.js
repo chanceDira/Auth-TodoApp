@@ -1,25 +1,49 @@
-import logo from './logo.svg';
+import React, { Component } from 'react'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Home from './container/Home/Home'
+import Payment from "./test/Payment"
 import './App.css';
+import Login from './components/Login/Login';
+import Signup from './components/Signup/Signup';
+import NotFound from './components/NotFound/NotFound';
+import { auth, db } from './Config/Config'
 
-function App() {
+class App extends Component  {
+
+  state = {
+    currentUser: null
+  }  
+
+  componentDidMount() {
+    auth.onAuthStateChanged(user => {   //This returns the current user if any
+      if(user){
+        db.collection('users').doc(user.uid).get().then(snapshot => {
+          this.setState({
+            currentUser: snapshot.data().FullName
+          })
+        })
+      } else {
+        console.log('User is not signed in to retrive  username')
+      }
+    }) 
+  }
+
+render() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+   <Router>
+     <Switch>
+       <Route exact path='/' component={() => <Home
+        currentUser={this.state.currentUser}
+       />} />
+       <Route path='/signup' component={Signup} />
+       <Route path='/login' component={Login} />
+       <Route component={NotFound} />
+     </Switch>
+   </Router>
+  // <Payment />
   );
+};
+  
 }
 
 export default App;
