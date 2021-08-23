@@ -40,12 +40,30 @@ div.wrapper {
 
 }
 
+@media(max-width: 768px){
+  .header-box{
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
 
 .header-box .leftside {
   flex: 1;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+}
+
+@media(max-width: 768px){
+  .header-box .leftside{
+    width: 100%;
+    flex-direction: column-reverse;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 20px;
+
+  }
 }
 
 .header-box .leftside .img {
@@ -79,6 +97,13 @@ div.wrapper {
   justify-content: center;
   align-items: center;
 
+}
+
+@media(max-width: 768px){
+  .header-box .rightside{
+    width: 100%;
+    text-align: center;
+  }
 }
 
 .header-box .rightside .btn, .header-box .rightside .btn:hover {
@@ -123,4 +148,32 @@ div.wrapper {
 .welcome-div {
   color: #fff;
   letter-spacing: 0.09em;
+}
+
+/* todo */
+.todo {
+  background-color: #e4e4e4;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 10px 0px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.todo .actions-div {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.todo .actions-div div {
+  margin: 0px 10px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  color: rgb(221, 17, 17);
+  cursor: pointer;
 }

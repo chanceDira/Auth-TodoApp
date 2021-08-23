@@ -1,18 +1,40 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Header from '../../components/Header/Header'
+import Todos from '../../components/Todos/Todos';
+import {auth,db} from '../../Config/Config'
 
-export default function Home({currentUser}) {
+export default function Home({currentUser, todos, deleteTodo}) {
+
+    const[todo, setTodo] = useState('');
+    const[todoError, setTodoError] = useState('');
+
+    const handleTodoSubmit = (e) => {
+        e.preventDefault();
+        auth.onAuthStateChanged(user=>{
+           if(user){
+                db.collection('todos of ' + user.uid).add({
+                    Todo: todo
+                }).then(setTodo('')).catch(err=>setTodoError(err.message))
+              
+           } else {
+               console.log('User is not signed in to add todo to database');
+           }
+        })
+    }
+
     return (
         <div className='wrapper'>
             <Header currentUser={currentUser} />
             <br></br>
             <br></br>
             <div className='container'>
-                <form autoComplete='off' className='form-group'>
+                <form autoComplete='off' className='form-group'
+                onSubmit={handleTodoSubmit}>
                     {currentUser && <>
                         <input type='text' placeholder="Enter TODO's"
                             className='form-control' required
-                           
+                            onChange={(e) => setTodo(e.target.value)}
+                            value={todo}
                         />
                         <br></br>
                         <div style={{width: 100+'%',
@@ -42,6 +64,8 @@ export default function Home({currentUser}) {
                         </div>
                     </>}
                 </form>
+                {todoError && <div className='error-msg'>{todoError}</div>}
+                <Todos todos={todos} deleteTodo={deleteTodo} />
             </div>
         </div>
     )
